@@ -11,33 +11,62 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.system.measureNanoTime
 
+/** Data class for the input parameters of the benchmark endpoint. */
 data class BenchmarkInput(
-    @field:Min(value = 1, message = "List must have at least 1 element.")
-    val listSizeA: Int,
-    @field:Min(value = 1, message = "List must have at least 1 element.")
-    val listSizeB: Int,
-    @field:Min(value = 2, message = "A benchmark must have at lest 2 elements.")
-    val iterations: Int
+    /** The size of the first (random) list of (unique) integers. */
+    @field:Min(value = 1, message = "List must have at least 1 element.") val listSizeA: Int,
+    /** The size of the second (random) list of (unique) integers. */
+    @field:Min(value = 1, message = "List must have at least 1 element.") val listSizeB: Int,
+    /** The number of iterations of the benchmark. */
+    @field:Min(value = 2, message = "A benchmark must have at lest 2 elements.") val iterations: Int,
 )
 
+/** Data class for the benchmark results. */
 data class BenchmarkOutput(
+    /** The size of the first list of (random, unique) integers. */
     val listSizeA: Int,
+    /** The size of the second list of (random, unique) integers. */
     val listSizeB: Int,
-    val meanMsSmall: Double,
+    /**
+     * The average time in milliseconds of the intersection calculation where the **smaller** of the
+     * two lists is converted to a set.
+     */
     val meanMsLarge: Double,
-    val meanErrMsSmall: Double,
+    /**
+     * The average time in milliseconds of the intersection calculation where the **larger** of the
+     * two lists is converted to a set.
+     */
+    val meanMsSmall: Double,
+    /**
+     * The error in the mean in milliseconds of the intersection calculation where the **smaller**
+     * of the two lists is converted to a set.
+     */
     val meanErrMsLarge: Double,
+    /**
+     * The error in the mean in milliseconds of the intersection calculation where the **larger** of
+     * the two lists is converted to a set.
+     */
+    val meanErrMsSmall: Double,
 )
 
+/** Data class for the input parameters of the simple intersection calculation endpoint. */
 data class ExecutionInput(
-    @field:Min(value = 1, message = "List must have at least 1 element.")
-    val listSizeA: Int,
-    @field:Min(value = 1, message = "List must have at least 1 element.")
-    val listSizeB: Int,
-    val listAToSet: Boolean
+    /** The size of the first list of (random, unique) integers. */
+    @field:Min(value = 1, message = "List must have at least 1 element.") val listSizeA: Int,
+    /** The size of the second list of (random, unique) integers. */
+    @field:Min(value = 1, message = "List must have at least 1 element.") val listSizeB: Int,
+    /**
+     * Whether the first of the two lists should be converted to a set, otherwise, convert the
+     * second list to a set.
+     */
+    val listAToSet: Boolean,
 )
 
-data class ExecutionOutput(val timeMs: Double)
+/** Data class for the result of the simple intersection calculation. */
+data class ExecutionOutput(
+    /** The time in milliseconds it took to calculate the intersection. */
+    val timeMs: Double
+)
 
 /**
  * Controller for calculating and benchmarking intersections of lists of integers.

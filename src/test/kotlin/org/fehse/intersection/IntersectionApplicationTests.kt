@@ -7,6 +7,4 @@ import org.springframework.boot.test.context.SpringBootTest
 class IntersectionApplicationTests {
 
     @Test fun contextLoads() {}
-
-    @Test fun `test if benchmark endpoint is active`() {}
 }

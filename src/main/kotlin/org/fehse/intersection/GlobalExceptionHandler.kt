@@ -39,13 +39,19 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleValidationExceptions(exception: MethodArgumentNotValidException, request: WebRequest,): ResponseEntity<ErrorResponse> {
+    fun handleValidationExceptions(
+        exception: MethodArgumentNotValidException,
+        request: WebRequest,
+    ): ResponseEntity<ErrorResponse> {
         val errorResponse =
             ErrorResponse(
                 timestamp = System.currentTimeMillis(),
                 status = HttpStatus.BAD_REQUEST.value(),
                 error = "Validation Error",
-                message = exception.bindingResult.fieldErrors.joinToString { error -> "${error.field}: ${error.defaultMessage ?: "NO MESSAGE"}\n" },
+                message =
+                    exception.bindingResult.fieldErrors.joinToString { error ->
+                        "${error.field}: ${error.defaultMessage ?: "NO MESSAGE"}\n"
+                    },
                 path = request.getDescription(false).replace("uri=", ""),
             )
         logger.error("Validation failed while handling request", exception)
