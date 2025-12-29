@@ -65,7 +65,9 @@ data class ExecutionInput(
 /** Data class for the result of the simple intersection calculation. */
 data class ExecutionOutput(
     /** The time in milliseconds it took to calculate the intersection. */
-    val timeMs: Double
+    val timeMs: Double,
+    /** The size of the resulting intersection list. */
+    val listSize: Int,
 )
 
 /**
@@ -105,8 +107,8 @@ class IntersectionController(private val service: IntersectionService) {
                 val listA = randomList(input.listSizeA, 0..maxN, uniqueElements = true)
                 val listB = randomList(input.listSizeB, 0..maxN, uniqueElements = true)
                 measureNanoTime {
-                        val res = service.intersectionBySize(listA, listB)
-                    }
+                    val res = service.intersectionBySize(listA, listB)
+                }
                     .toDouble() * 1e-3
             }
 
@@ -115,8 +117,8 @@ class IntersectionController(private val service: IntersectionService) {
                 val listA = randomList(input.listSizeA, 0..maxN, uniqueElements = true)
                 val listB = randomList(input.listSizeB, 0..maxN, uniqueElements = true)
                 measureNanoTime {
-                        val res = service.intersectionBySize(listA, listB, smallerToSet = false)
-                    }
+                    val res = service.intersectionBySize(listA, listB, smallerToSet = false)
+                }
                     .toDouble() * 1e-3
             }
 
@@ -161,8 +163,9 @@ class IntersectionController(private val service: IntersectionService) {
         val listB = randomList(listSizeB, 0..maxSize)
         val (left, right) = if (aToSet) Pair(listA, listB) else Pair(listB, listA)
 
-        val time = measureNanoTime { service.intersection(left, right) }.toDouble() / 1000.0
+        var size = 0
+        val time = measureNanoTime { size = service.intersection(left, right).size }.toDouble() / 1000.0
 
-        return ExecutionOutput(time)
+        return ExecutionOutput(time, size)
     }
 }
